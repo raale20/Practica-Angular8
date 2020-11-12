@@ -10,7 +10,8 @@ export class NuevoCorreoComponent implements OnInit {
 
   nuevoCorreo: FormGroup;
   submitted = false;
-  @Input() correo: any;
+  @Input() correo: any; //Con esto recibimos correo en la lista de correos
+  @Output() accionRealizada: EventEmitter<any> =new EventEmiter();
 
   constructor(private formBuilder: FormBuilder) { }
 
@@ -28,8 +29,12 @@ export class NuevoCorreoComponent implements OnInit {
   onSubmit() {
     this.submitted = true;
 
-    if (this.nuevoCorreo.invalid) {
-      return;
+    if (this.correo!=undefined) {
+      console.log("A",this.correo);
+      this.nuevoCorreo.patchValue({
+        titulo: "Re:" + this.correo.titulo,
+        destinatario: this.correo.emisor
+      });
     }
 
     let correo = this.nuevoCorreo.value;
@@ -43,6 +48,7 @@ export class NuevoCorreoComponent implements OnInit {
   onReset() {
     this.submitted = false;
     this.nuevoCorreo.reset();
+    this.accionRealizada.emit();
   }
 
 }
